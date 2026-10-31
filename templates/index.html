@@ -1,0 +1,169 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Performance | Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+<aside class="sidebar">
+    <div class="logo">🎓 Edu<span>Track</span></div>
+    <p style="color:#c9b9e9;font-size:11px;margin:20px 0 15px;">MAIN MENU</p>
+
+    <a href="/" class="active">📊 Dashboard</a>
+    <a href="/students">👩‍🎓 Students</a>
+    <a href="/subjects">📚 Subjects</a>
+    <a href="/marks">✏️ Marks Entry</a>
+    <a href="/attendance">📋 Attendance</a>
+    <a href="/performance">🌟 Performance</a>
+    <a href="/reports">📄 Reports</a>
+    <a href="/recommendations">💡 Recommendations</a>
+    <a href="/settings">⚙️ Settings</a>
+</aside>
+
+<main class="main-content">
+
+    <div class="topbar">
+        <div>
+            <h1>Dashboard Overview ✨</h1>
+            <p class="subtitle">Welcome back! Here's your academic performance overview.</p>
+        </div>
+        <div class="profile">
+            <i class="fas fa-user-circle"></i> Admin
+        </div>
+    </div>
+
+    <section class="cards">
+
+        <div class="stat-card">
+            <h3><i class="fas fa-users"></i> Total Students</h3>
+            <h2>{{ total_students }}</h2>
+            <p class="subtitle">Student records</p>
+        </div>
+
+        <div class="stat-card">
+            <h3><i class="fas fa-book"></i> Total Subjects</h3>
+            <h2>{{ total_subjects }}</h2>
+            <p class="subtitle">Available subjects</p>
+        </div>
+
+        <div class="stat-card">
+            <h3><i class="fas fa-award"></i> Average Performance</h3>
+            <h2>{{ overall_average }}%</h2>
+            <p class="subtitle">Overall average marks</p>
+        </div>
+
+        <div class="stat-card">
+            <h3><i class="fas fa-pen"></i> Marks Records</h3>
+            <h2>{{ total_marks }}</h2>
+            <p class="subtitle">Marks entries</p>
+        </div>
+
+        <div class="stat-card">
+            <h3><i class="fas fa-calendar-check"></i> Attendance Records</h3>
+            <h2>{{ total_attendance }}</h2>
+            <p class="subtitle">Attendance entries</p>
+        </div>
+
+    </section>
+
+    <section class="panel">
+    <h2>📊 Subject-wise Average Marks</h2>
+    <p class="subtitle">Average marks scored in each subject.</p>
+    <div style="height:250px; position:relative;">
+        <canvas id="subjectChart"></canvas>
+    </div>
+</section>
+
+<section class="panel">
+    <h2>🎓 Student-wise Performance</h2>
+    <p class="subtitle">Average marks of each student.</p>
+    <div style="height:280px; position:relative;">
+        <canvas id="studentChart"></canvas>
+    </div>
+</section>
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    const subjectData = {{ subject_chart | tojson }};
+    const studentData = {{ student_chart | tojson }};
+
+    const subjectLabels = subjectData.map(item => item.subject_name);
+    const subjectMarks = subjectData.map(item => item.average_marks ?? 0);
+
+    const studentLabels = studentData.map(item => item.name);
+    const studentMarks = studentData.map(item => item.average_marks ?? 0);
+
+    new Chart(document.getElementById('subjectChart'), {
+        type: 'bar',
+        data: {
+            labels: subjectLabels,
+            datasets: [{
+                label: 'Average Marks',
+                data: subjectMarks,
+backgroundColor: [
+    '#8b6bea',
+    '#e88ab5',
+    '#5799ed',
+    '#a78bfa',
+    '#f4a261',
+    '#65c9b8'
+],                borderRadius: 8,
+                  barThickness: 40,
+                  maxBarThickness: 100
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 100
+                }
+            }
+        }
+    });
+
+    new Chart(document.getElementById('studentChart'), {
+        type: 'bar',
+        data: {
+            labels: studentLabels,
+            datasets: [{
+                label: 'Average Marks',
+                data: studentMarks,
+backgroundColor: [
+    '#e88ab5',
+    '#8b6bea',
+    '#5799ed',
+    '#65c9b8',
+    '#f4a261',
+    '#a78bfa'
+],                borderRadius: 8,
+                  barThickness: 40,
+                  maxBarThickness: 100
+
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 100
+                }
+            }
+        }
+    });
+</script>
+
+</body>
+</html>

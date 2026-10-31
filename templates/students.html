@@ -1,0 +1,197 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Students | EduTrack</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .student-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .student-header h2 {
+            color: #6848c9;
+            margin-bottom: 7px;
+        }
+
+        .student-header p {
+            color: #9185a8;
+            font-size: 14px;
+        }
+
+        .student-form {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #6848c9;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #e5dcf5;
+            border-radius: 10px;
+            outline: none;
+            color: #51416f;
+            background: #fcfaff;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #7654e8;
+        }
+
+        .form-actions {
+            grid-column: 1 / -1;
+        }
+
+        .student-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 600px;
+        }
+
+        .student-table th,
+        .student-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee8fa;
+            font-size: 13px;
+        }
+
+        .student-table th {
+            color: #7654e8;
+            background: #f5f0ff;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+        }
+
+        @media (max-width: 650px) {
+            .student-form {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <aside class="sidebar">
+    <div class="logo">
+          🎓 Edu<span>Track</span>
+    </div>
+
+    <p style="color:#c9b9e9;font-size:11px;margin:20px 0 15px;">
+        MAIN MENU
+    </p>
+
+    <a href="/">📊 Dashboard</a>
+    <a href="/students" class="active">👩‍🎓 Students</a>
+    <a href="/subjects">📚 Subjects</a>
+    <a href="/marks">✏️ Marks Entry</a>
+    <a href="/attendance">📋 Attendance</a>
+    <a href="/performance">🌟 Performance</a>
+    <a href="/reports">📄 Reports</a>
+    <a href="/recommendations">💡 Recommendations</a>
+    <a href="/settings">⚙️ Settings</a>
+</aside>
+    <main class="main-content">
+        <div class="student-header">
+            <div>
+                <h1>Student Management 👩‍🎓</h1>
+                <p>Add and manage student information</p>
+            </div>
+        </div>
+
+        <section class="panel">
+            <h2>＋ Add New Student</h2>
+
+            <form class="student-form" action="/students/add" method="POST">
+                <div class="form-group">
+                    <label>Student Name</label>
+                    <input type="text" name="name" placeholder="Enter student name" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Roll Number</label>
+                    <input type="text" name="roll_number" placeholder="Enter roll number" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Department</label>
+                    <input type="text" name="department" placeholder="Enter department">
+                </div>
+
+                <div class="form-group">
+                    <label>Year</label>
+                    <select name="year" required>
+                        <option value="">Select year</option>
+                        <option value="1">First Year</option>
+                        <option value="2">Second Year</option>
+                        <option value="3">Third Year</option>
+                        <option value="4">Fourth Year</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" name="email" placeholder="Enter email address">
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit">Save Student</button>
+                </div>
+            </form>
+        </section>
+
+        <section class="panel">
+            <h2>Student Records</h2>
+            <div class="table-wrap">
+                <table class="student-table">
+                    <thead>
+                        <tr>
+                            <th>Roll Number</th>
+                            <th>Student Name</th>
+                            <th>Department</th>
+                            <th>Year</th>
+                            <th>Email</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for student in students %}
+                        <tr>
+                            <td>{{ student.roll_number }}</td>
+                            <td>{{ student.name }}</td>
+                            <td>{{ student.department }}</td>
+                            <td>{{ student.year }}</td>
+                            <td>{{ student.email }}</td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="5">No student records found.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+</body>
+</html>

@@ -1,0 +1,184 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marks Entry | EduTrack</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .page-heading { margin-bottom: 25px; }
+        .page-heading h1 { color: #7654e8; margin-bottom: 8px; }
+        .page-heading p { color: #9185a8; font-size: 14px; }
+
+        .marks-form {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #6848c9;
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #e5dcf5;
+            border-radius: 10px;
+            background: #fcfaff;
+            color: #51416f;
+            outline: none;
+        }
+
+        .form-actions { grid-column: 1 / -1; }
+
+        .marks-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 650px;
+        }
+
+        .marks-table th,
+        .marks-table td {
+            padding: 14px;
+            text-align: left;
+            border-bottom: 1px solid #eee8fa;
+            font-size: 13px;
+        }
+
+        .marks-table th {
+            background: #f5f0ff;
+            color: #7654e8;
+        }
+
+        .table-wrap { overflow-x: auto; }
+
+        @media(max-width: 650px) {
+            .marks-form { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <aside class="sidebar">
+    <div class="logo">
+        🎓 Edu<span>Track</span>
+    </div>
+
+    <p style="color:#c9b9e9;font-size:11px;margin:20px 0 15px;">
+        MAIN MENU
+    </p>
+
+    <a href="/">📊 Dashboard</a>
+    <a href="/students">👩‍🎓 Students</a>
+    <a href="/subjects">📚 Subjects</a>
+    <a href="/marks" class="active">✏️ Marks Entry</a>
+    <a href="/attendance">📋 Attendance</a>
+    <a href="/performance">🌟 Performance</a>
+    <a href="/reports">📄 Reports</a>
+    <a href="/recommendations">💡 Recommendations</a>
+    <a href="/settings">⚙️ Settings</a>
+</aside>
+
+    <main class="main-content">
+
+        <div class="page-heading">
+            <h1>Marks Entry ✏️</h1>
+            <p>Record and manage student examination marks</p>
+        </div>
+
+        <section class="panel">
+            <h2>＋ Enter Student Marks</h2>
+
+            <form class="marks-form" action="/marks/add" method="POST">
+
+                <div class="form-group">
+                    <label>Student</label>
+                    <select name="student_id" required>
+                        <option value="">Select Student</option>
+                        {% for student in students %}
+                        <option value="{{ student.student_id }}">
+                            {{ student.name }} - {{ student.roll_number }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Subject</label>
+                    <select name="subject_id" required>
+                        <option value="">Select Subject</option>
+                        {% for subject in subjects %}
+                        <option value="{{ subject.subject_id }}">
+                            {{ subject.subject_name }} - {{ subject.subject_code }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Internal Marks (Out of 25)</label>
+                    <input type="number" name="internal_marks"
+                           min="0" max="25" placeholder="Enter internal marks" required>
+                </div>
+
+                <div class="form-group">
+                    <label>External Marks (Out of 75)</label>
+                    <input type="number" name="external_marks"
+                           min="0" max="75" placeholder="Enter external marks" required>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit">Save Marks</button>
+                </div>
+
+            </form>
+        </section>
+
+        <section class="panel">
+            <h2>📊 Marks Records</h2>
+
+            <div class="table-wrap">
+                <table class="marks-table">
+                    <thead>
+                        <tr>
+                            <th>Student</th>
+                            <th>Roll Number</th>
+                            <th>Subject</th>
+                            <th>Internal</th>
+                            <th>External</th>
+                            <th>Total</th>
+                            <th>Grade</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for mark in marks %}
+                        <tr>
+                            <td>{{ mark.name }}</td>
+                            <td>{{ mark.roll_number }}</td>
+                            <td>{{ mark.subject_name }}</td>
+                            <td>{{ mark.internal_marks }}</td>
+                            <td>{{ mark.external_marks }}</td>
+                            <td>{{ mark.total_marks }}</td>
+                            <td>{{ mark.grade }}</td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="7">No marks records found.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </main>
+</body>
+</html>

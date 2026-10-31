@@ -1,0 +1,192 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subjects | EduTrack</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .page-heading {
+            margin-bottom: 25px;
+        }
+
+        .page-heading h1 {
+            color: #7654e8;
+            margin-bottom: 8px;
+        }
+
+        .page-heading p {
+            color: #9185a8;
+            font-size: 14px;
+        }
+
+        .subject-form {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #6848c9;
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #e5dcf5;
+            border-radius: 10px;
+            background: #fcfaff;
+            color: #51416f;
+            outline: none;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #7654e8;
+        }
+
+        .form-actions {
+            grid-column: 1 / -1;
+        }
+
+        .subject-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 500px;
+        }
+
+        .subject-table th,
+        .subject-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee8fa;
+            font-size: 13px;
+        }
+
+        .subject-table th {
+            background: #f5f0ff;
+            color: #7654e8;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+        }
+
+        @media(max-width: 650px) {
+            .subject-form {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+   <aside class="sidebar">
+    <div class="logo">
+        🎓 Edu<span>Track</span>
+    </div>
+
+    <p style="color:#c9b9e9;font-size:11px;margin:20px 0 15px;">
+        MAIN MENU
+    </p>
+
+    <a href="/">📊 Dashboard</a>
+    <a href="/students">👩‍🎓 Students</a>
+    <a href="/subjects" class="active">📚 Subjects</a>
+    <a href="/marks">✏️ Marks Entry</a>
+    <a href="/attendance">📋 Attendance</a>
+    <a href="/performance">🌟 Performance</a>
+    <a href="/reports">📄 Reports</a>
+    <a href="/recommendations">💡 Recommendations</a>
+    <a href="/settings">⚙️ Settings</a>
+</aside>
+
+    <main class="main-content">
+
+        <div class="page-heading">
+            <h1>Subject Management 📚</h1>
+            <p>Add and manage academic subjects</p>
+        </div>
+
+        <section class="panel">
+            <h2>＋ Add New Subject</h2>
+
+            <form class="subject-form" action="/subjects/add" method="POST">
+
+                <div class="form-group">
+                    <label>Subject Name</label>
+                    <input type="text" name="subject_name"
+                           placeholder="Enter subject name" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Subject Code</label>
+                    <input type="text" name="subject_code"
+                           placeholder="Enter subject code" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Department</label>
+                    <input type="text" name="department"
+                           placeholder="Enter department" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Year</label>
+                    <select name="year" required>
+                        <option value="">Select year</option>
+                        <option value="1">First Year</option>
+                        <option value="2">Second Year</option>
+                        <option value="3">Third Year</option>
+                        <option value="4">Fourth Year</option>
+                    </select>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit">Save Subject</button>
+                </div>
+
+            </form>
+        </section>
+
+        <section class="panel">
+            <h2>📖 Subject Records</h2>
+
+            <div class="table-wrap">
+                <table class="subject-table">
+                    <thead>
+                        <tr>
+                            <th>Subject Code</th>
+                            <th>Subject Name</th>
+                            <th>Department</th>
+                            <th>Year</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for subject in subjects %}
+                        <tr>
+                            <td>{{ subject.subject_code }}</td>
+                            <td>{{ subject.subject_name }}</td>
+                            <td>{{ subject.department }}</td>
+                            <td>{{ subject.year }}</td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="4">No subjects added yet.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </main>
+</body>
+</html>

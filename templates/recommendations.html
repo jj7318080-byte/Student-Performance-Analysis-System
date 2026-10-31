@@ -1,0 +1,228 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Recommendations | EduTrack</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <style>
+        .recommendation-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 22px;
+            margin-top: 25px;
+        }
+
+        .recommendation-card {
+            background: white;
+            padding: 23px;
+            border-radius: 16px;
+            border: 1px solid #eee8fa;
+            box-shadow: 0 5px 20px rgba(60,35,100,.07);
+        }
+
+        .student-info {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            padding-bottom: 17px;
+            border-bottom: 1px solid #eeeaf5;
+        }
+
+        .student-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 13px;
+            background: #f0eafe;
+            color: #7654e8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 23px;
+        }
+
+        .student-info h3 {
+            color: #6848c9;
+            font-size: 17px;
+            margin: 0 0 5px;
+        }
+
+        .student-info p {
+            color: #9588aa;
+            font-size: 12px;
+            margin: 0;
+        }
+
+        .average-box {
+            background: #f7f4ff;
+            padding: 15px;
+            border-radius: 11px;
+            margin-top: 18px;
+        }
+
+        .average-box p {
+            color: #827496;
+            font-size: 12px;
+            margin: 0 0 7px;
+        }
+
+        .average-box h2 {
+            color: #7654e8;
+            font-size: 26px;
+            margin: 0;
+        }
+
+        .suggestion {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 11px;
+            background: #eff5ff;
+            color: #477ec8;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .suggestion.excellent {
+            background: #eaf8ef;
+            color: #27834c;
+        }
+
+        .suggestion.average {
+            background: #fff4df;
+            color: #a87920;
+        }
+
+        .suggestion.needs-work {
+            background: #ffecef;
+            color: #c94d65;
+        }
+
+        .empty-message {
+            grid-column: 1 / -1;
+            background: white;
+            padding: 35px;
+            border-radius: 15px;
+            text-align: center;
+            color: #9588aa;
+        }
+
+        @media (max-width: 950px) {
+            .recommendation-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<aside class="sidebar">
+    <div class="logo">🎓 Edu<span>Track</span></div>
+
+    <p style="color:#c9b9e9;font-size:11px;margin:20px 0 15px;">
+        MAIN MENU
+    </p>
+
+    <a href="/">📊 Dashboard</a>
+    <a href="/students">👩‍🎓 Students</a>
+    <a href="/subjects">📚 Subjects</a>
+    <a href="/marks">✏️ Marks Entry</a>
+    <a href="/attendance">📋 Attendance</a>
+    <a href="/performance">🌟 Performance</a>
+    <a href="/reports">📄 Reports</a>
+    <a href="/recommendations" class="active">💡 Recommendations</a>
+    <a href="/settings">⚙️ Settings</a>
+</aside>
+
+<main class="main-content">
+
+    <div class="topbar">
+        <h2>💡 Student Recommendations</h2>
+        <p>Personalized academic improvement suggestions</p>
+    </div>
+
+    <div class="recommendation-grid">
+
+        {% for student in recommendations %}
+
+        <div class="recommendation-card">
+
+            <div class="student-info">
+                <div class="student-icon">👩‍🎓</div>
+
+                <div>
+                    <h3>{{ student.name }}</h3>
+                    <p>Roll Number: {{ student.roll_number }}</p>
+                </div>
+            </div>
+
+            <div class="average-box">
+                <p>Average Marks</p>
+
+                <h2>
+                    {% if student.average_marks is not none %}
+                        {{ student.average_marks }}%
+                    {% else %}
+                        --
+                    {% endif %}
+                </h2>
+            </div>
+
+            {% if student.average_marks is none %}
+
+                <div class="suggestion">
+                    <strong>📝 Marks Not Available</strong><br>
+                    Enter marks to receive academic recommendations.
+                </div>
+
+            {% elif student.average_marks >= 90 %}
+
+                <div class="suggestion excellent">
+                    <strong>🌟 Excellent Performance!</strong><br>
+                    Keep up the great work and continue maintaining your results.
+                </div>
+
+            {% elif student.average_marks >= 75 %}
+
+                <div class="suggestion">
+                    <strong>👍 Good Performance</strong><br>
+                    Continue practising and focus on achieving higher marks.
+                </div>
+
+            {% elif student.average_marks >= 50 %}
+
+                <div class="suggestion average">
+                    <strong>📖 Need More Practice</strong><br>
+                    Spend more time revising lessons and practising questions.
+                </div>
+
+            {% else %}
+
+                <div class="suggestion needs-work">
+                    <strong>💪 Improvement Needed</strong><br>
+                    Focus on basic concepts and ask teachers for additional guidance.
+                </div>
+
+            {% endif %}
+
+        </div>
+
+        {% else %}
+
+        <div class="empty-message">
+            <h3>No Student Records Available</h3>
+            <p>Add students and enter marks to receive recommendations.</p>
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</main>
+
+</body>
+</html>

@@ -1,0 +1,149 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reports | EduTrack</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <style>
+        .report-panel {
+            background: white;
+            padding: 25px;
+            border-radius: 16px;
+            border: 1px solid #eee8fa;
+            box-shadow: 0 5px 20px rgba(60,35,100,.07);
+            margin-top: 25px;
+        }
+
+        .report-panel h3 {
+            color: #6848c9;
+            margin-bottom: 20px;
+        }
+
+        .report-table-wrap {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        .report-table {
+            width: 100%;
+            min-width: 550px;
+            border-collapse: collapse;
+        }
+
+        .report-table th {
+            background: #f2edff;
+            color: #6848c9;
+            padding: 14px;
+            text-align: left;
+        }
+
+        .report-table td {
+            padding: 14px;
+            border-bottom: 1px solid #eeeaf5;
+            color: #51436d;
+        }
+
+        .report-empty {
+            text-align: center;
+            padding: 25px;
+            color: #9588aa;
+        }
+
+        .report-note {
+            color: #9588aa;
+            font-size: 13px;
+            margin-top: 12px;
+        }
+    </style>
+</head>
+
+<body>
+
+<aside class="sidebar">
+    <div class="logo">🎓 Edu<span>Track</span></div>
+
+    <p style="color:#c9b9e9;font-size:11px;margin:20px 0 15px;">
+        MAIN MENU
+    </p>
+
+    <a href="/">📊 Dashboard</a>
+    <a href="/students">👩‍🎓 Students</a>
+    <a href="/subjects">📚 Subjects</a>
+    <a href="/marks">✏️ Marks Entry</a>
+    <a href="/attendance">📋 Attendance</a>
+    <a href="/performance">🌟 Performance</a>
+    <a href="/reports" class="active">📄 Reports</a>
+    <a href="/recommendations">💡 Recommendations</a>
+    <a href="/settings">⚙️ Settings</a>
+</aside>
+
+<main class="main-content">
+
+    <div class="topbar">
+        <h2>📄 Student Reports</h2>
+        <p>Complete academic marks overview</p>
+    </div>
+
+    <section class="report-panel">
+
+        <h3>Student Academic Reports</h3>
+
+        <div class="report-table-wrap">
+
+            <table class="report-table">
+
+                <thead>
+                    <tr>
+                        <th>Student Name</th>
+                        <th>Roll Number</th>
+                        <th>Subjects</th>
+                        <th>Total Marks</th>
+                        <th>Average Marks</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for student in reports %}
+                    <tr>
+                        <td>{{ student.name }}</td>
+                        <td>{{ student.roll_number }}</td>
+                        <td>{{ student.subject_count }}</td>
+                        <td>{{ student.total_marks }}</td>
+                        <td>
+                            {% if student.average_marks is not none %}
+                                {{ student.average_marks }}%
+                            {% else %}
+                                No Marks
+                            {% endif %}
+                        </td>
+                    </tr>
+
+                    {% else %}
+                    <tr>
+                        <td colspan="5" class="report-empty">
+                            No student reports available.
+                        </td>
+                    </tr>
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        <p class="report-note">
+            Reports are automatically updated from student marks records.
+        </p>
+
+    </section>
+
+</main>
+
+</body>
+</html>

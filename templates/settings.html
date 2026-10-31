@@ -1,0 +1,140 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings | EduTrack</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .settings-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 22px;
+            margin-top: 25px;
+        }
+        .settings-card {
+            background: white;
+            padding: 25px;
+            border-radius: 16px;
+            border: 1px solid #eee8fa;
+            box-shadow: 0 5px 20px rgba(60,35,100,.07);
+        }
+        .settings-card h3 {
+            color: #6848c9;
+            margin: 0 0 12px;
+            font-size: 18px;
+        }
+        .settings-card p {
+            color: #827496;
+            font-size: 13px;
+            line-height: 1.7;
+        }
+        .settings-icon {
+            font-size: 28px;
+            margin-bottom: 12px;
+        }
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid #eeeaf5;
+            font-size: 13px;
+        }
+        .info-row span:first-child {
+            color: #827496;
+        }
+        .info-row span:last-child {
+            color: #6848c9;
+            font-weight: 600;
+        }
+        @media (max-width: 800px) {
+            .settings-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<aside class="sidebar">
+    <div class="logo">🎓 Edu<span>Track</span></div>
+    <p style="color:#c9b9e9;font-size:11px;margin:20px 0 15px;">MAIN MENU</p>
+    <a href="/">📊 Dashboard</a>
+    <a href="/students">👩‍🎓 Students</a>
+    <a href="/subjects">📚 Subjects</a>
+    <a href="/marks">✏️ Marks Entry</a>
+    <a href="/attendance">📋 Attendance</a>
+    <a href="/performance">🌟 Performance</a>
+    <a href="/reports">📄 Reports</a>
+    <a href="/recommendations">💡 Recommendations</a>
+    <a href="/settings" class="active">⚙️ Settings</a>
+</aside>
+
+<main class="main-content">
+    <div class="topbar">
+        <h2>⚙️ Settings</h2>
+        <p>Manage your EduTrack system information</p>
+    </div>
+
+    <div class="settings-grid">
+
+        <div class="settings-card">
+            <div class="settings-icon">👤</div>
+            <h3>Profile Information</h3>
+            <p>EduTrack is an academic management system designed to maintain student records and analyse performance.</p>
+            <div class="info-row">
+                <span>System Name</span>
+                <span>EduTrack</span>
+            </div>
+            <div class="info-row">
+                <span>Project</span>
+                <span>Student Performance</span>
+            </div>
+        </div>
+
+        <div class="settings-card">
+            <div class="settings-icon">🎨</div>
+            <h3>Appearance</h3>
+            <p>Your dashboard uses a purple-themed interface with clean cards and easy navigation.</p>
+            <div class="info-row">
+                <span>Theme</span>
+                <span>Purple</span>
+            </div>
+            <div class="info-row">
+                <span>Layout</span>
+                <span>Dashboard</span>
+            </div>
+        </div>
+
+        <div class="settings-card">
+            <div class="settings-icon">🗄️</div>
+            <h3>Database Information</h3>
+            <p>Student, subject, marks and attendance records are stored in your MySQL database.</p>
+            <div class="info-row">
+                <span>Database</span>
+                <span>MySQL</span>
+            </div>
+            <div class="info-row">
+                <span>Database Name</span>
+                <span>student_performance</span>
+            </div>
+        </div>
+
+        <div class="settings-card">
+            <div class="settings-icon">ℹ️</div>
+            <h3>About EduTrack</h3>
+            <p>EduTrack helps manage student details, record marks and attendance, analyse academic results and provide improvement suggestions.</p>
+            <div class="info-row">
+                <span>Version</span>
+                <span>1.0</span>
+            </div>
+            <div class="info-row">
+                <span>Status</span>
+                <span>Development</span>
+            </div>
+        </div>
+
+    </div>
+</main>
+</body>
+</html>

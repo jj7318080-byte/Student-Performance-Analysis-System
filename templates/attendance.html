@@ -1,0 +1,264 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance Management | EduTrack</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <style>
+        .attendance-layout {
+            display: grid;
+            grid-template-columns: 0.85fr 1.5fr;
+            gap: 25px;
+            align-items: start;
+            margin-top: 25px;
+        }
+
+        .attendance-card {
+            background: white;
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: 0 5px 20px rgba(60, 35, 100, 0.07);
+            border: 1px solid #eee8fa;
+            min-width: 0;
+        }
+
+        .attendance-card h3 {
+            color: #6848c9;
+            font-size: 19px;
+            margin-bottom: 22px;
+        }
+
+        .attendance-form label {
+            display: block;
+            margin: 15px 0 8px;
+            color: #51436d;
+            font-weight: 600;
+        }
+
+        .attendance-form input,
+        .attendance-form select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ded5f2;
+            border-radius: 9px;
+            outline: none;
+            background: #fcfbff;
+            font-size: 14px;
+        }
+
+        .attendance-form input:focus,
+        .attendance-form select:focus {
+            border-color: #7654e8;
+        }
+
+        .attendance-form button {
+            width: 100%;
+            margin-top: 22px;
+            padding: 13px;
+            border: none;
+            border-radius: 9px;
+            background: #7654e8;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .attendance-table-wrap {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        .attendance-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 430px;
+        }
+
+        .attendance-table th {
+            background: #f2edff;
+            color: #6848c9;
+            padding: 14px 12px;
+            text-align: left;
+            font-size: 13px;
+        }
+
+        .attendance-table td {
+            padding: 14px 12px;
+            border-bottom: 1px solid #eeeaf5;
+            color: #51436d;
+            font-size: 13px;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .present {
+            background: #e4f7ec;
+            color: #21834a;
+        }
+
+        .absent {
+            background: #ffe9ec;
+            color: #d34b60;
+        }
+
+        .late {
+            background: #fff3dc;
+            color: #b77a16;
+        }
+
+        .empty-records {
+            text-align: center;
+            padding: 25px;
+            color: #9588aa;
+        }
+
+        @media (max-width: 950px) {
+            .attendance-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<aside class="sidebar">
+    <div class="logo">🎓 Edu<span>Track</span></div>
+
+    <p style="color:#c9b9e9;font-size:11px;margin:20px 0 15px;">
+        MAIN MENU
+    </p>
+
+    <a href="/">📊 Dashboard</a>
+    <a href="/students">👩‍🎓 Students</a>
+    <a href="/subjects">📚 Subjects</a>
+    <a href="/marks">✏️ Marks Entry</a>
+    <a href="/attendance" class="active">📋 Attendance</a>
+    <a href="/performance">🌟 Performance</a>
+    <a href="/reports">📄 Reports</a>
+    <a href="/recommendations">💡 Recommendations</a>
+    <a href="/settings">⚙️ Settings</a>
+</aside>
+
+<main class="main-content">
+
+    <div class="topbar">
+        <h2>Attendance Management 📋</h2>
+        <p>Manage and monitor daily student attendance</p>
+    </div>
+
+    <div class="attendance-layout">
+
+        <!-- MARK ATTENDANCE FORM -->
+        <section class="attendance-card">
+
+            <h3>➕ Mark Attendance</h3>
+
+            <form class="attendance-form"
+                  action="/attendance/add"
+                  method="POST">
+
+                <label>Select Student</label>
+
+                <select name="student_id" required>
+                    <option value="">Choose Student</option>
+
+                    {% for student in students %}
+                    <option value="{{ student.student_id }}">
+                        {{ student.name }} - {{ student.roll_number }}
+                    </option>
+                    {% endfor %}
+                </select>
+
+                <label>Attendance Date</label>
+
+                <input type="date"
+                       name="attendance_date"
+                       required>
+
+                <label>Attendance Status</label>
+
+                <select name="status" required>
+                    <option value="">Select Status</option>
+                    <option value="Present">Present</option>
+                    <option value="Absent">Absent</option>
+                    <option value="Late">Late</option>
+                </select>
+
+                <button type="submit">Save Attendance</button>
+
+            </form>
+
+        </section>
+
+        <!-- ATTENDANCE RECORDS TABLE -->
+        <section class="attendance-card">
+
+            <h3>📋 Attendance Records</h3>
+
+            <div class="attendance-table-wrap">
+
+                <table class="attendance-table">
+
+                    <thead>
+                        <tr>
+                            <th>Student Name</th>
+                            <th>Roll Number</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        {% for record in attendance %}
+                        <tr>
+                            <td>{{ record.name }}</td>
+
+                            <td>{{ record.roll_number }}</td>
+
+                            <td>{{ record.attendance_date }}</td>
+
+                            <td>
+                                {% if record.status == 'Present' %}
+                                    <span class="status present">Present</span>
+                                {% elif record.status == 'Absent' %}
+                                    <span class="status absent">Absent</span>
+                                {% else %}
+                                    <span class="status late">Late</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+
+                        {% else %}
+                        <tr>
+                            <td colspan="4" class="empty-records">
+                                No attendance records available.
+                            </td>
+                        </tr>
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+    </div>
+
+</main>
+
+</body>
+</html>
